@@ -6,7 +6,6 @@ import { GeistMono } from "geist/font/mono"
 // <CHANGE> Thêm font Playfair Display cho tiêu đề học thuật
 import { Playfair_Display } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
-import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
 import "./globals.css"
 
@@ -21,8 +20,6 @@ export default function ClientLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const searchParams = useSearchParams()
-
   return (
     <html lang="vi">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} ${playfair.variable}`}>
