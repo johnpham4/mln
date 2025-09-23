@@ -1,11 +1,21 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse, JSONResponse, HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 from service_logic import chat_service, chat_service_streaming  # tách logic riêng
 from dto import ChatRequest
 import uvicorn
 from pathlib import Path
 
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],  # Frontend URLs
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Serve index.html
 @app.get("/", response_class=HTMLResponse)
@@ -27,7 +37,6 @@ async def chat_stream_endpoint(request: ChatRequest):
         chat_service_streaming(request.message),
         media_type="text/event-stream"
     )
-
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 

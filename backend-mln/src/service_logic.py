@@ -27,9 +27,11 @@ def chat_service_streaming(user_input: str):
             result = streaming_conversation.predict(input=user_input)
             q.put(json.dumps({"final": result}, ensure_ascii=False))
         except Exception as e:
-            q.put(json.dumps({"final": f"Error: {e}"}, ensure_ascii=False))
+            error_msg = f"Lỗi API: {str(e)}"
+            print(f"Error in streaming: {error_msg}")
+            q.put(json.dumps({"error": error_msg}, ensure_ascii=False))
         finally:
-            q.put(None) 
+            q.put(None)
 
     # chạy LLM trong thread riêng
     threading.Thread(target=run_chain, daemon=True).start()
@@ -39,5 +41,6 @@ def chat_service_streaming(user_input: str):
             item = q.get()
             if item is None:
                 break
+            print(f"{item}")
             yield f"data: {item}\n\n"
     return event_generator()

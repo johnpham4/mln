@@ -177,3 +177,28 @@
 .text-pretty {
   text-wrap: pretty;
 }
+
+/* Chatbot animations */
+.chat-message-enter {
+  animation: slideInFromBottom 0.3s ease-out;
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.typing-indicator {
+  animation: pulse 2s infinite;
+}
+
+/* Scroll to bottom animation */
+.chat-scroll {
+  scroll-behavior: smooth;
+}

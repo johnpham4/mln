@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Input } from "@/components/ui/input"
 import {
   ChevronRight,
   BookOpen,
@@ -18,11 +19,142 @@ import {
   Lightbulb,
   History,
   TrendingUp,
+  MessageCircle,
+  Send,
+  Bot,
 } from "lucide-react"
+
+interface ChatMessage {
+  id: number
+  content: string
+  type: "user" | "ai"
+  timestamp: string
+}
 
 export default function MarxistPhilosophyPage() {
   const [activeSection, setActiveSection] = useState("intro")
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
+  const [chatInput, setChatInput] = useState("")
+  const [isStreaming, setIsStreaming] = useState(false)
+  const chatEndRef = React.useRef<HTMLDivElement>(null)
+
+  // Auto scroll to bottom when new messages arrive
+  React.useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [chatMessages])
+
+  const handleSendMessage = async () => {
+    if (!chatInput.trim() || isStreaming) return
+
+    const userMessage: ChatMessage = {
+      id: Date.now(),
+      content: chatInput,
+      type: "user",
+      timestamp: new Date().toLocaleTimeString()
+    }
+
+    setChatMessages(prev => [...prev, userMessage])
+    setChatInput("")
+    setIsStreaming(true)
+
+    try {
+      const response = await fetch("http://localhost:8000/chat/stream", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: chatInput }),
+      })
+
+      if (!response.body) {
+        throw new Error("No response body")
+      }
+
+      const aiMessage: ChatMessage = {
+        id: Date.now() + 1,
+        content: "",
+        type: "ai",
+        timestamp: new Date().toLocaleTimeString()
+      }
+
+      setChatMessages(prev => [...prev, aiMessage])
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+
+        const chunk = decoder.decode(value)
+        const lines = chunk.split('\n')
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6).trim()
+            if (data === '[DONE]' || data === '') {
+              continue
+            }
+            try {
+              const parsed = JSON.parse(data)
+
+              // Xử lý token streaming
+              if (parsed.token) {
+                setChatMessages(prev =>
+                  prev.map(msg =>
+                    msg.id === aiMessage.id
+                      ? { ...msg, content: msg.content + parsed.token }
+                      : msg
+                  )
+                )
+              }
+
+              // Xử lý final response
+              if (parsed.final) {
+                setChatMessages(prev =>
+                  prev.map(msg =>
+                    msg.id === aiMessage.id
+                      ? { ...msg, content: parsed.final }
+                      : msg
+                  )
+                )
+                setIsStreaming(false)
+                return
+              }
+
+              // Xử lý error
+              if (parsed.error) {
+                setChatMessages(prev =>
+                  prev.map(msg =>
+                    msg.id === aiMessage.id
+                      ? { ...msg, content: `Lỗi: ${parsed.error}` }
+                      : msg
+                  )
+                )
+                setIsStreaming(false)
+                return
+              }
+
+            } catch (e) {
+              // Ignore parsing errors for incomplete chunks
+              console.log("Parse error:", e, "Data:", data)
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error)
+      setChatMessages(prev => [...prev, {
+        id: Date.now() + 2,
+        content: "Xin lỗi, có lỗi xảy ra khi kết nối với server. Vui lòng kiểm tra xem backend đã chạy chưa (http://localhost:8000).",
+        type: "ai" as const,
+        timestamp: new Date().toLocaleTimeString()
+      }])
+    } finally {
+      setIsStreaming(false)
+    }
+  }
 
   const sections = [
     {
@@ -48,6 +180,12 @@ export default function MarxistPhilosophyPage() {
       title: "Đấu tranh giai cấp",
       icon: Users,
       description: "Động lực trực tiếp thay đổi xã hội",
+    },
+    {
+      id: "chatbot",
+      title: "Chatbot AI",
+      icon: MessageCircle,
+      description: "Trò chuyện với AI về triết học",
     },
     {
       id: "conclusion",
@@ -444,6 +582,125 @@ export default function MarxistPhilosophyPage() {
                   >
                     Đến kết luận <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )
+
+      case "chatbot":
+        return (
+          <div className="space-y-8">
+            <Card className="section-card">
+              <CardHeader>
+                <CardTitle className="text-3xl text-primary flex items-center gap-3">
+                  <MessageCircle className="w-8 h-8" />
+                  Chatbot AI Triết học
+                </CardTitle>
+                <CardDescription className="text-lg">
+                  Trò chuyện với AI về các vấn đề triết học Marxist
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col h-[600px] bg-background rounded-lg border">
+                  {/* Chat Header */}
+                  <div className="flex items-center gap-3 p-4 border-b bg-muted/50 rounded-t-lg">
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                      <Bot className="w-4 h-4 text-primary-foreground" />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-sm">AI Triết học</h4>
+                      <p className="text-xs text-muted-foreground">Sẵn sàng thảo luận về triết học Marxist</p>
+                    </div>
+                  </div>
+
+                  {/* Chat Messages */}
+                  <ScrollArea className="flex-1 p-4">
+                    <div className="space-y-4">
+                      {chatMessages.length === 0 && (
+                        <div className="text-center text-muted-foreground py-8">
+                          <Bot className="w-12 h-12 mx-auto mb-4 text-muted-foreground/50" />
+                          <p>Chào bạn! Tôi có thể giúp bạn tìm hiểu về triết học Marxist.</p>
+                          <p className="text-sm mt-2">Hãy đặt câu hỏi về bất kỳ chủ đề nào trong triết học!</p>
+                        </div>
+                      )}
+
+                      {chatMessages.map((message) => (
+                        <div
+                          key={message.id}
+                          className={`flex gap-3 ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                        >
+                          {message.type === 'ai' && (
+                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                              <Bot className="w-4 h-4 text-primary-foreground" />
+                            </div>
+                          )}
+
+                          <div
+                            className={`max-w-[70%] p-3 rounded-lg ${
+                              message.type === 'user'
+                                ? 'bg-primary text-primary-foreground'
+                                : 'bg-muted text-foreground'
+                            }`}
+                          >
+                            <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                            <span className="text-xs opacity-70 mt-1 block">{message.timestamp}</span>
+                          </div>
+
+                          {message.type === 'user' && (
+                            <div className="w-8 h-8 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
+                              <span className="text-sm font-medium text-secondary-foreground">U</span>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+
+                      {isStreaming && (
+                        <div className="flex gap-3 justify-start">
+                          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                            <Bot className="w-4 h-4 text-primary-foreground" />
+                          </div>
+                          <div className="bg-muted text-foreground p-3 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <div className="flex space-x-1">
+                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.3s]"></div>
+                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce [animation-delay:-0.15s]"></div>
+                                <div className="w-2 h-2 bg-primary rounded-full animate-bounce"></div>
+                              </div>
+                              <span className="text-xs text-muted-foreground">AI đang suy nghĩ...</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div ref={chatEndRef} />
+                  </ScrollArea>
+
+                  {/* Chat Input */}
+                  <div className="p-4 border-t">
+                    <div className="flex gap-2">
+                      <Input
+                        type="text"
+                        value={chatInput}
+                        onChange={(e) => setChatInput(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        placeholder="Nhập câu hỏi về triết học..."
+                        disabled={isStreaming}
+                        className="flex-1"
+                      />
+                      <Button
+                        onClick={handleSendMessage}
+                        disabled={!chatInput.trim() || isStreaming}
+                        size="sm"
+                        className="px-3"
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      Nhấn Enter để gửi tin nhắn
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>

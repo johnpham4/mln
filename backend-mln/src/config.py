@@ -1,4 +1,4 @@
-API_KEY = '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'
+API_KEY = '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'
 API_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL_NAME = "deepseek/deepseek-chat"
 
