@@ -8,6 +8,7 @@
     #chat { border: 1px solid #ccc; padding: 10px; max-width: 600px; height: 400px; overflow-y: auto; }
     textarea { width: 600px; height: 50px; }
     button { margin-top: 5px; }
+    p { margin: 5px 0; }
   </style>
 </head>
 <body>
@@ -24,26 +25,48 @@
       const chatDiv = document.getElementById("chat");
       chatDiv.innerHTML += `<p><b>You:</b> ${input}</p>`;
 
+      let botMsg = document.createElement("p");
+      botMsg.innerHTML = "<b>Bot:</b> ";
+      chatDiv.appendChild(botMsg);
+
       try {
-        const res = await fetch("http://127.0.0.1:8000/chat", {  
+        const res = await fetch("http://127.0.0.1:8000/chat/stream", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: input })
         });
 
-        const data = await res.json();
-        console.log("Server reply:", data); 
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
 
-        if (data.answer) {
-          chatDiv.innerHTML += `<p><b>Bot:</b> ${data.answer}</p>`;
-        } else {
-          chatDiv.innerHTML += `<p style="color:red;"><b>Error:</b> ${JSON.stringify(data)}</p>`;
+        let buffer = "";
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const parts = buffer.split("\n\n");
+          buffer = parts.pop();
+
+          for (const part of parts) {
+            if (!part.startsWith("data: ")) continue;
+            const data = JSON.parse(part.replace("data: ", ""));
+
+            if (data.token) {
+              botMsg.innerHTML += data.token;
+            }
+
+            if (data.final) {
+              botMsg.innerHTML = `<b>Bot:</b> ${data.final}`;
+            }
+          }
+          chatDiv.scrollTop = chatDiv.scrollHeight;
         }
       } catch (err) {
+        console.error("Streaming error:", err);
         chatDiv.innerHTML += `<p style="color:red;"><b>Error:</b> ${err}</p>`;
       }
 
-      chatDiv.scrollTop = chatDiv.scrollHeight;
       document.getElementById("input").value = "";
     }
   </script>
