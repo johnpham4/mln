@@ -1,4 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend MLN - Triết học Marxist
+
+Frontend Next.js cho ứng dụng học triết học Marxist.
+
+## Cấu hình Environment Variables
+
+### Local Development (.env.local)
+```
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+### Production (Vercel Environment Variables)
+```
+NEXT_PUBLIC_API_URL=https://your-backend.vercel.app
+```
+
+## Cách deploy lên Vercel
+
+### 1. Deploy Backend trước
+- Deploy backend theo hướng dẫn trong `backend-mln/README.md`
+- Lấy URL của backend (ví dụ: `https://mln-backend.vercel.app`)
+
+### 2. Deploy Frontend
+1. Truy cập [vercel.com](https://vercel.com)
+2. Tạo new project cho frontend
+3. Import repository và chọn thư mục `frontend`
+4. Thêm Environment Variables:
+   ```
+   NEXT_PUBLIC_API_URL=https://your-backend-url.vercel.app
+   ```
+5. Deploy
+
+### 3. Cập nhật CORS trong Backend
+Sau khi có URL frontend, cập nhật CORS trong backend:
+```python
+allow_origins=[
+    "https://your-frontend.vercel.app",
+    "http://localhost:3000"  # cho development
+]
+```
 
 ## Getting Started
 

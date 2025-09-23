@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import LoadingPage from "@/components/LoadingPage"
+import config from "@/lib/config"
 import IntroSection from "@/components/sections/IntroSection"
 import TheorySection from "@/components/sections/TheorySection"
 import ContradictionSection from "@/components/sections/ContradictionSection"
@@ -57,7 +58,7 @@ export default function MarxistPhilosophyPage() {
     setIsStreaming(true)
 
     try {
-      const response = await fetch("http://localhost:8000/chat/stream", {
+      const response = await fetch(config.getApiUrl("/chat/stream"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

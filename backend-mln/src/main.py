@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse, JSONResponse, HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
-from service_logic import chat_service, chat_service_streaming  # tách logic riêng
+from service_simple import chat_service, chat_service_streaming  # sử dụng service đơn giản
 from dto import ChatRequest
 import uvicorn
 from pathlib import Path
@@ -25,8 +25,14 @@ app.add_middleware(
 # Serve index.html
 @app.get("/", response_class=HTMLResponse)
 def serve_index():
-    html_path = Path(__file__).parent / "index.html"
-    return html_path.read_text(encoding="utf-8")
+    try:
+        html_path = Path(__file__).parent / "index.html"
+        if html_path.exists():
+            return html_path.read_text(encoding="utf-8")
+        else:
+            return HTMLResponse(content="<h1>MLN Backend API</h1><p>API is running successfully!</p>")
+    except Exception as e:
+        return HTMLResponse(content=f"<h1>MLN Backend API</h1><p>API is running! Error: {str(e)}</p>")
 
 @app.post("/chat")
 async def chat_endpoint(request: Request):
