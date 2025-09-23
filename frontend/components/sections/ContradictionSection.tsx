@@ -5,7 +5,6 @@ import {
   Zap,
   Users,
   ArrowRight,
-  ChevronRight,
 } from "lucide-react"
 
 interface ContradictionSectionProps {

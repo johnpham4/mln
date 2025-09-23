@@ -1,10 +1,11 @@
 const config = {
+  // Vercel backend URL sẽ là: https://backend-mln.vercel.app/api
   apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
 
-  // API endpoints
+  // API endpoints - thêm /api prefix cho Vercel
   endpoints: {
-    chat: '/chat',
-    chatStream: '/chat/stream',
+    chat: '/api/chat',
+    chatStream: '/api/chat/stream',
   },
 
   // Get full API URL

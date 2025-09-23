@@ -1,15 +1,19 @@
 {
-  "version": 2,
+  "name": "backend-mln",
   "builds": [
     {
-      "src": "src/main.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
+      "src": "/api/(.*)",
+      "dest": "api/index.py"
+    },
+    {
       "src": "/(.*)",
-      "dest": "src/main.py"
+      "dest": "api/index.py"
     }
   ]
 }

@@ -34,7 +34,7 @@ export default function LoadingPage({ onEnter }: LoadingPageProps) {
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-8 mb-8 question-card">
               <Quote className="w-12 h-12 text-primary mx-auto mb-6" />
               <blockquote className="text-xl md:text-2xl font-medium text-foreground leading-relaxed text-pretty">
-                "Trình bày lý thuyết về học thuyết hình thái kinh tế - xã hội, vận dụng để phân tích mâu thuẫn giữa lực lượng sản xuất và quan hệ sản xuất, vai trò của đấu tranh giai cấp, từ đó lý giải vì sao xã hội luôn vận động và biến đổi."
+                &ldquo;Trình bày lý thuyết về học thuyết hình thái kinh tế - xã hội, vận dụng để phân tích mâu thuẫn giữa lực lượng sản xuất và quan hệ sản xuất, vai trò của đấu tranh giai cấp, từ đó lý giải vì sao xã hội luôn vận động và biến đổi.&rdquo;
               </blockquote>
             </div>
 

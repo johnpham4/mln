@@ -64,7 +64,8 @@ def chat_service_streaming(user_input: str):
                         if 'choices' in data_json and len(data_json['choices']) > 0:
                             delta = data_json['choices'][0].get('delta', {})
                             if 'content' in delta:
-                                yield f"data: {json.dumps({'token': delta['content']})}\n\n"
+                                print(delta)
+                                yield f"data: {json.dumps({'content': delta['content']})}\n\n"
                     except json.JSONDecodeError:
                         continue
 

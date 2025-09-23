@@ -4,7 +4,7 @@ import React, { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import LoadingPage from "@/components/LoadingPage"
-import config from "@/lib/config"
+import { getApiUrl } from "@/lib/api-config"
 import IntroSection from "@/components/sections/IntroSection"
 import TheorySection from "@/components/sections/TheorySection"
 import ContradictionSection from "@/components/sections/ContradictionSection"
@@ -58,7 +58,7 @@ export default function MarxistPhilosophyPage() {
     setIsStreaming(true)
 
     try {
-      const response = await fetch(config.getApiUrl("/chat/stream"), {
+      const response = await fetch(getApiUrl("CHAT_STREAM"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,26 +98,19 @@ export default function MarxistPhilosophyPage() {
             try {
               const parsed = JSON.parse(data)
 
-              // Xử lý token streaming
-              if (parsed.token) {
+              // Xử lý content streaming từ backend
+              if (parsed.content) {
                 setChatMessages(prev =>
                   prev.map(msg =>
                     msg.id === aiMessage.id
-                      ? { ...msg, content: msg.content + parsed.token }
+                      ? { ...msg, content: msg.content + parsed.content }
                       : msg
                   )
                 )
               }
 
-              // Xử lý final response
-              if (parsed.final) {
-                setChatMessages(prev =>
-                  prev.map(msg =>
-                    msg.id === aiMessage.id
-                      ? { ...msg, content: parsed.final }
-                      : msg
-                  )
-                )
+              // Xử lý khi streaming kết thúc
+              if (parsed.type === "done") {
                 setIsStreaming(false)
                 return
               }
@@ -146,7 +139,7 @@ export default function MarxistPhilosophyPage() {
       console.error("Error:", error)
       setChatMessages(prev => [...prev, {
         id: Date.now() + 2,
-        content: "Xin lỗi, có lỗi xảy ra khi kết nối với server. Vui lòng kiểm tra xem backend đã chạy chưa (http://localhost:8000).",
+        content: "Xin lỗi, có lỗi xảy ra khi kết nối với server. Vui lòng thử lại sau.",
         type: "ai" as const,
         timestamp: new Date().toLocaleTimeString()
       }])
