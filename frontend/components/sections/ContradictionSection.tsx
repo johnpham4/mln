@@ -88,17 +88,13 @@ export default function ClassStruggleSection({ onNext }: ClassStruggleSectionPro
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <span className="text-sm">Vai trò trong lao động và quản lý</span>
+                      <span className="text-sm">Vai trò trong lao động</span>
                     </div>
                   </div>
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <span className="text-sm">Phân phối sản phẩm lao động</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 bg-primary rounded-full"></div>
-                      <span className="text-sm">Địa vị xã hội và quyền lực</span>
+                      <span className="text-sm">Quản lý và phân phối sản phẩm lao động</span>
                     </div>
                   </div>
                 </div>

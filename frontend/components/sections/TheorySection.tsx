@@ -76,7 +76,8 @@ export default function TheorySection({ onNext }: TheorySectionProps) {
                     <CardContent>
                       <p className="text-sm text-foreground text-pretty">
                         Nếu vẫn giữ nguyên trạng thái cũ, lạc hậu, cố định, không phản ánh được trình độ LLSX mới, sẽ
-                        trở thành vật cản lịch sử.
+                        trở thành vật cản lịch sử. Nó ngăn cản sản xuất phát triển, làm hạn chế tiến bộ xã hội.
+
                       </p>
                     </CardContent>
                   </Card>
