@@ -163,9 +163,9 @@ export default function MarxistPhilosophyPage() {
     },
     {
       id: "contradiction",
-      title: "Mâu thuẫn lực lượng sản xuất",
+      title: "Vai trò của đấu tranh giai cấp.",
       icon: Zap,
-      description: "Động lực cơ bản của sự vận động",
+      description: "Động lực trực tiếp của lịch sử xã hội",
     },
     {
       id: "class-struggle",
