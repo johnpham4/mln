@@ -89,7 +89,7 @@ const ConclusionSection = () => {
           <Card
             key={section.id}
             className={`section-card cursor-pointer transition-all duration-300 hover:shadow-lg ${
-              activeSection === section.id ? 'border-primary/50 bg-primary/5' : ''
+              activeSection === section.id ? 'border-primary/20 bg-primary/5' : ''
             }`}
             onClick={() => toggleSection(section.id)}
           >

@@ -11,6 +11,7 @@ import ContradictionSection from "@/components/sections/ContradictionSection"
 import ClassStruggleSection from "@/components/sections/ClassStruggleSection"
 import ChatbotSection from "@/components/sections/ChatbotSection"
 import ConclusionSection from "@/components/sections/ConclusionSection"
+import AIUsageSection from "@/components/sections/AIUsageSection"
 import {
   BookOpen,
   Users,
@@ -185,6 +186,12 @@ export default function MarxistPhilosophyPage() {
       icon: MessageCircle,
       description: "Trò chuyện với AI về triết học",
     },
+    {
+      id: "ai-usage",
+      title: "Ứng dụng AI có trách nhiệm",
+      icon: Search,
+      description: "Minh bạch, sáng tạo và liêm chính học thuật",
+    },
   ]
 
   const renderContent = () => {
@@ -216,6 +223,9 @@ export default function MarxistPhilosophyPage() {
 
       case "conclusion":
         return <ConclusionSection />
+
+      case "ai-usage":
+        return <AIUsageSection />
 
       default:
         return null
