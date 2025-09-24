@@ -174,16 +174,16 @@ export default function MarxistPhilosophyPage() {
       description: "Động lực trực tiếp thay đổi xã hội",
     },
     {
+      id: "conclusion",
+      title: "Câu hỏi kiến tạo",
+      icon: Quote,
+      description: "Tại sao xã hội luôn vận động?",
+    },
+    {
       id: "chatbot",
       title: "Chatbot AI",
       icon: MessageCircle,
       description: "Trò chuyện với AI về triết học",
-    },
-    {
-      id: "conclusion",
-      title: "Kết luận",
-      icon: Quote,
-      description: "Tổng hợp và ý nghĩa thực tiễn",
     },
   ]
 
@@ -289,24 +289,30 @@ export default function MarxistPhilosophyPage() {
       </aside>
 
       <main className="flex-1 overflow-auto">
-        <div className="philosophy-header text-primary-foreground py-8 px-8">
-          <div className="flex items-center gap-4 mb-4">
-            <Search className="w-6 h-6" />
-            <h1 className="text-2xl font-bold">Khám phá triết học Marxist</h1>
+        {activeSection !== "chatbot" && (
+          <div className="philosophy-header text-primary-foreground py-8 px-8">
+            <div className="flex items-center gap-4 mb-4">
+              <Search className="w-6 h-6" />
+              <h1 className="text-2xl font-bold">Khám phá triết học Marxist</h1>
+            </div>
+            <p className="text-primary-foreground/90">Tìm hiểu sâu về lý thuyết vận động và phát triển của xã hội</p>
           </div>
-          <p className="text-primary-foreground/90">Tìm hiểu sâu về lý thuyết vận động và phát triển của xã hội</p>
+        )}
+
+        <div className={activeSection === "chatbot" ? "h-screen" : "p-8"}>
+          {renderContent()}
         </div>
 
-        <div className="p-8">{renderContent()}</div>
-
-        <footer className="border-t bg-card mt-12">
-          <div className="p-8 text-center">
-            <p className="text-muted-foreground">Website học tập triết học Marxist - Tạo bởi v0.app</p>
-            <p className="text-sm text-muted-foreground mt-2 italic">
-              &quot;Triết gia chỉ giải thích thế giới theo nhiều cách khác nhau, vấn đề là thay đổi nó&quot; - Karl Marx
-            </p>
-          </div>
-        </footer>
+        {activeSection !== "chatbot" && (
+          <footer className="border-t bg-card mt-12">
+            <div className="p-8 text-center">
+              <p className="text-muted-foreground">Website học tập triết học Marxist - Tạo bởi v0.app</p>
+              <p className="text-sm text-muted-foreground mt-2 italic">
+                &quot;Triết gia chỉ giải thích thế giới theo nhiều cách khác nhau, vấn đề là thay đổi nó&quot; - Karl Marx
+              </p>
+            </div>
+          </footer>
+        )}
       </main>
     </div>
   )
