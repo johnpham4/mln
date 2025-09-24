@@ -42,7 +42,7 @@ export default function ChatbotSection({
               </div>
               <h3 className="text-lg font-semibold text-primary mb-2">AI Triết học</h3>
               <p className="text-muted-foreground max-w-md">
-                Sẵn sàng thảo luận về triết học Marxist. 
+                Sẵn sàng thảo luận về triết học Marxist.
                 Hãy đặt câu hỏi về bất kỳ chủ đề nào trong triết học!
               </p>
             </div>
@@ -56,8 +56,8 @@ export default function ChatbotSection({
               }`}
             >
               <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-sm ${
-                message.type === "user" 
-                  ? "bg-primary text-primary-foreground" 
+                message.type === "user"
+                  ? "bg-primary text-primary-foreground"
                   : "bg-white border border-gray-200 text-primary"
               }`}>
                 {message.type === "user" ? (
