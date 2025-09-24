@@ -152,21 +152,21 @@ export default function MarxistPhilosophyPage() {
   const sections = [
     {
       id: "intro",
-      title: "Đặt vấn đề",
+      title: "Lý thuyết về học thuyết hình thái kinh tế - xã hội",
       icon: Target,
-      description: "Câu hỏi kiến tạo về sự vận động xã hội",
+      description: "Hình thái kinh tế - xã hội",
     },
     {
       id: "theory",
-      title: "Học thuyết hình thái kinh tế xã hội",
+      title: "Phân tích mâu thuẫn giữa lực lượng sản xuất/ quan hệ sản xuất.",
       icon: BookOpen,
-      description: "Nền tảng lý thuyết Marx",
+      description: "Mâu thuẫn giữa LLSX/QHSX.",
     },
     {
       id: "contradiction",
-      title: "Mâu thuẫn lực lượng sản xuất",
+      title: "Vai trò của đấu tranh giai cấp.",
       icon: Zap,
-      description: "Động lực cơ bản của sự vận động",
+      description: "Động lực trực tiếp của lịch sử xã hội",
     },
     {
       id: "class-struggle",
@@ -238,44 +238,43 @@ export default function MarxistPhilosophyPage() {
   }
 
   return (
+
     <div className="min-h-screen bg-background flex">
       <aside
         className={`philosophy-sidebar ${sidebarOpen ? "w-80" : "w-16"} transition-all duration-300 flex-shrink-0`}
       >
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className={`font-bold text-primary ${sidebarOpen ? "text-xl" : "text-sm"} transition-all`}>
-              {sidebarOpen ? "Triết học Marxist" : "TL"}
-            </h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="text-muted-foreground hover:text-primary"
-            >
-              <Menu className="w-4 h-4" />
-            </Button>
-          </div>
-
-          <ScrollArea className="h-[calc(100vh-120px)]">
-            <nav className="space-y-2">
-              {sections.map((section) => {
-                const Icon = section.icon
-                const isActive = activeSection === section.id
-
-                return (
-                  <button
-                    key={section.id}
-                    onClick={() => setActiveSection(section.id)}
-                    className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
-                      isActive
-                        ? "bg-primary text-primary-foreground shadow-md"
-                        : "hover:bg-muted text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-primary-foreground" : ""}`} />
-                      {sidebarOpen && (
+        {sidebarOpen ? (
+          <div className="p-6">
+            <div className="flex items-center justify-between mb-8">
+              <h2 className={`font-bold text-primary text-xl transition-all`}>
+                Triết học Marxist
+              </h2>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setSidebarOpen(false)}
+                className="text-muted-foreground hover:text-primary"
+              >
+                <Menu className="w-4 h-4" />
+              </Button>
+            </div>
+            <ScrollArea className="h-[calc(100vh-120px)]">
+              <nav className="space-y-2">
+                {sections.map((section) => {
+                  const Icon = section.icon
+                  const isActive = activeSection === section.id
+                  return (
+                    <button
+                      key={section.id}
+                      onClick={() => setActiveSection(section.id)}
+                      className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
+                        isActive
+                          ? "bg-primary text-primary-foreground shadow-md"
+                          : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-primary-foreground" : ""}`} />
                         <div className="min-w-0">
                           <div className={`font-medium text-sm ${isActive ? "text-primary-foreground" : ""}`}>
                             {section.title}
@@ -288,14 +287,25 @@ export default function MarxistPhilosophyPage() {
                             {section.description}
                           </div>
                         </div>
-                      )}
-                    </div>
-                  </button>
-                )
-              })}
-            </nav>
-          </ScrollArea>
-        </div>
+                      </div>
+                    </button>
+                  )
+                })}
+              </nav>
+            </ScrollArea>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center pt-6">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSidebarOpen(true)}
+              className="text-muted-foreground hover:text-primary"
+            >
+              <Menu className="w-8 h-8" />
+            </Button>
+          </div>
+        )}
       </aside>
 
       <main className="flex-1 overflow-auto">
