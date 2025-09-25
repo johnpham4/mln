@@ -59,12 +59,15 @@ export default function MarxistPhilosophyPage() {
     setIsStreaming(true)
 
     try {
+      // Send only message for service_simple API
       const response = await fetch(getApiUrl("CHAT_STREAM"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: chatInput }),
+        body: JSON.stringify({
+          message: chatInput
+        }),
       })
 
       if (!response.body) {
@@ -170,9 +173,9 @@ export default function MarxistPhilosophyPage() {
     },
     {
       id: "class-struggle",
-      title: "Đấu tranh giai cấp",
+      title: "Tổng kết và lý giải",
       icon: Users,
-      description: "Động lực trực tiếp thay đổi xã hội",
+      description: "Vì sao xã hội luôn vận động và biến đổi",
     },
     {
       id: "conclusion",

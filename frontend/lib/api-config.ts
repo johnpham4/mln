@@ -1,6 +1,6 @@
 // Backend API configuration
 export const API_CONFIG = {
-  BASE_URL: 'https://backend5-59e7dfh4s-minhpnkse183507-9685s-projects.vercel.app',
+  BASE_URL: 'https://backend5-five.vercel.app',
   ENDPOINTS: {
     CHAT: '/api/chat',
     CHAT_STREAM: '/api/chat/stream',

@@ -1,0 +1,13 @@
+{
+  "message": "Tên tôi là gì?",
+  "conversation_history": [
+    {
+      "role": "user",
+      "content": "Tôi tên John"
+    },
+    {
+      "role": "assistant",
+      "content": "Xin chào John! Tôi đã ghi nhớ tên bạn. Bạn có câu hỏi gì về triết học Marxist không?"
+    }
+  ]
+}

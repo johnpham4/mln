@@ -230,7 +230,7 @@ const AIUsageSection = () => {
                         <h4 className="font-semibold mb-2">Prompt chính:</h4>
                         <ul className="list-disc list-inside text-sm space-y-1">
                           {principle.details.prompts?.map((prompt, idx) => (
-                            <li key={idx} className="italic">"{prompt}"</li>
+                            <li key={idx} className="italic">&ldquo;{prompt}&rdquo;</li>
                           ))}
                         </ul>
                       </div>

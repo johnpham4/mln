@@ -66,3 +66,5 @@ python src/main.py
 ```
 
 Server sẽ chạy tại `http://localhost:8000`
+
+cd d:\mln\backend-mln && curl -X POST -H "Content-Type: application/json" -d "@test.json" "https://backend5-five.vercel.app/api/chat/stream"

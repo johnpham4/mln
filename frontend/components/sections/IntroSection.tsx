@@ -37,9 +37,9 @@ export default function IntroSection({ onNext }: IntroSectionProps) {
           <div className="bg-primary/5 p-6 rounded-lg border-l-4 border-primary">
             <Quote className="w-8 h-8 text-primary mb-4" />
             <blockquote className="text-lg italic text-pretty">
-              "Một phạm trù cơ bản của chủ nghĩa duy vật lịch sử dùng để chỉ xã hội ở từng nấc thang lịch sử nhất định
+              &ldquo;Một phạm trù cơ bản của chủ nghĩa duy vật lịch sử dùng để chỉ xã hội ở từng nấc thang lịch sử nhất định
               với một kiểu quan hệ sản xuất đặc trưng cho xã hội đó, phù hợp với một trình độ nhất định của lực lượng
-              sản xuất và một kiến trúc thượng tầng tương ứng được xây dựng trên quan hệ sản xuất ấy."
+              sản xuất và một kiến trúc thượng tầng tương ứng được xây dựng trên quan hệ sản xuất ấy.&rdquo;
             </blockquote>
           </div>
 

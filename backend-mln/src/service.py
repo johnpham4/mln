@@ -23,12 +23,20 @@ def chat_service(request: ChatRequest):
     if msg in greetings:
         return {"answer": "Xin chào! Tôi là trợ lý AI chuyên về Chủ nghĩa duy vật lịch sử. Bạn có câu hỏi gì về Chương 3 không?"}
 
+    # Build messages with conversation history
+    messages = [{"role": "system", "content": system_prompt}]
+
+    # Add conversation history (safely handle None or empty)
+    if request.conversation_history:
+        for msg_item in request.conversation_history:
+            messages.append({"role": msg_item.role, "content": msg_item.content})
+
+    # Add current user message
+    messages.append({"role": "user", "content": request.message})
+
     payload = {
         "model": MODEL_NAME,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": request.message},
-        ],
+        "messages": messages,
         "temperature": 0.7,
         "max_tokens": 500,
     }
@@ -47,12 +55,21 @@ def chat_service_streaming(request: ChatRequest):
         return
 
     buffer = ""
+
+    # Build messages with conversation history
+    messages = [{"role": "system", "content": system_prompt}]
+
+    # Add conversation history (safely handle None or empty)
+    if request.conversation_history:
+        for msg_item in request.conversation_history:
+            messages.append({"role": msg_item.role, "content": msg_item.content})
+
+    # Add current user message
+    messages.append({"role": "user", "content": request.message})
+
     payload = {
         "model": MODEL_NAME,
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": request.message},
-        ],
+        "messages": messages,
         "temperature": 0.7,
         "max_tokens": 500,
         "stream": True
